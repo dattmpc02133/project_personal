@@ -50,7 +50,7 @@ const Cart = () => {
                                                         className="ri-delete-bin-line"
                                                         onClick={(e) => e.preventDefault(handleDelete(item.id))}
                                                     >
-                                                        xoa
+                                                      
                                                     </motion.i>
                                                 </td>
                                             </tr>
