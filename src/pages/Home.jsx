@@ -5,12 +5,18 @@ import heroImg from '~/assets/images/hero-img.png';
 import '~/styles/home.css';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import products from '~/assets/data/products';
+// import products from '~/assets/data/products';
 import Services from '~/services/Services';
 import ProductsList from '~/components/UI/ProductsList';
 import counterImg from '~/assets/images/counter-timer-img.png';
 import Clock from '~/components/UI/Clock';
+
+import useGetData from '~/custom-hooks/useGetData';
 const Home = () => {
+
+  const {data:products,loading} = useGetData('products');
+
+
     const [trendingProducts, setTrendingProducts] = useState([]);
     const [bestSalesProducts, setBestSalesProducts] = useState([]);
     const [mobileProducts, setMobileProducts] = useState([]);
@@ -29,7 +35,7 @@ const Home = () => {
         setMobileProducts(filteredMobilesProducts);
         setWirelessProducts(filteredWirelessProducts);
         setPopularProducts(filteredPopularProducts);
-    }, []);
+    }, [products]);
     return (
         <>
             <Helmet title={'Home'}>

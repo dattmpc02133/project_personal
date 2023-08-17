@@ -37,6 +37,7 @@ const Cart = () => {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => (
+                                            console.log(item),
                                             <tr key={index}>
                                                 <td>
                                                     <img src={item.imgUrl} alt="" />
