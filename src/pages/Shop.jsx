@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CommonSection from '~/components/UI/CommonSection';
 import Helmet from '~/components/Helmet/Helmet';
 import { Container, Row, Col } from 'reactstrap';
 import '~/styles/shop.css';
-import products from '~/assets/data/products';
+// import products from '~/assets/data/products';
 import ProductsList from '~/components/UI/ProductsList';
+import useGetData from '~/custom-hooks/useGetData';
 const Shop = () => {
-    const [productsData, setProductsData] = useState(products);
+    const { data: productsList } = useGetData('products');
+    const [productsData, setProductsData] = useState();
+    useEffect(() => {
+        if (productsList && productsList.length > 0) {
+            setProductsData(productsList);
+        }
+    }, [productsList]);
     const handleFilter = (e) => {
         const filterValue = e.target.value;
         if (filterValue && filterValue === 'all') {
-            setProductsData(products);
+            setProductsData(productsList);
             return;
         }
         if (filterValue) {
-            const filteredProducts = products.filter((item) => item.category === filterValue);
+            const filteredProducts = productsList.filter((item) => item.category === filterValue);
             setProductsData(filteredProducts);
         }
     };
     const handleSearch = (e) => {
         const searchTerm = e.target.value;
-        const searchedProducts = products.filter((item) =>
+        const searchedProducts = productsList.filter((item) =>
             item.productName.toLowerCase().includes(searchTerm.toLowerCase()),
         );
         setProductsData(searchedProducts);

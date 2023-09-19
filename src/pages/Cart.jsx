@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 const Cart = () => {
     const dispatch = useDispatch();
-    const cartItems = useSelector((state) => state.cart.cartItems);
+    const cartItems = useSelector((state) => state?.cart?.cartItems);
     const handleDelete = (id) => {
         dispatch(cartActions.deleteItem(id));
     };
@@ -37,22 +37,19 @@ const Cart = () => {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => (
-                                            console.log(item),
                                             <tr key={index}>
                                                 <td>
                                                     <img src={item.imgUrl} alt="" />
                                                 </td>
                                                 <td>{item.productName}</td>
                                                 <td>${item.price}</td>
-                                                <td>{item.quantity}px</td>
+                                                <td>{item.quantity}</td>
                                                 <td>
                                                     <motion.i
                                                         whileTap={{ scale: 1.2 }}
                                                         className="ri-delete-bin-line"
                                                         onClick={(e) => e.preventDefault(handleDelete(item.id))}
-                                                    >
-                                                      
-                                                    </motion.i>
+                                                    ></motion.i>
                                                 </td>
                                             </tr>
                                         ))}
@@ -62,11 +59,12 @@ const Cart = () => {
                         </Col>
                         <Col lg="3">
                             <div>
-                                <h6 className='d-flex align-items-center justify-content-between'>Subtotal
-                                <span className='fs-4 fw-bold'>${totalAmount}</span>
+                                <h6 className="d-flex align-items-center justify-content-between">
+                                    Subtotal
+                                    <span className="fs-4 fw-bold">${totalAmount}</span>
                                 </h6>
                             </div>
-                            <p className='fs-6 mt-2'>taxes and shipping will calculate in the checkout</p>
+                            <p className="fs-6 mt-2">taxes and shipping will calculate in the checkout</p>
                             <div>
                                 <button className="buy__btn w-100">
                                     <Link to="/checkout">Checkout</Link>

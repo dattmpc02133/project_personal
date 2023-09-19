@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import './header.css';
 import { motion } from 'framer-motion';
 import logo from '~/assets/images/eco-logo.png';
@@ -26,43 +26,50 @@ const nav_links = [
     },
 ];
 const Header = () => {
-    const headerRef = useRef(null);
+    const [sticky, setSticky] = useState('');
+
     const navigate = useNavigate();
     const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-    const profileActionRef = useRef(null); 
-    
+    const profileActionRef = useRef(null);
+
     const menuRef = useRef(null);
     const { currentUser } = useAuth();
-    const stickyHeaderFunc = () => {
-        window.addEventListener('scroll', () => {
-            if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-                headerRef.current.classList.add('sticky__header');
-            } else {
-                headerRef.current.classList.remove('sticky__header');
-            }
-        });
-    };
     const logout = () => {
-        signOut(auth).then(()=>{
-            toast.success('Logged out')
-            navigate('/home');
-        }).catch(error=> {
-            toast.error(error.message)
-        })
-    }
+        signOut(auth)
+            .then(() => {
+                toast.success('Logged out');
+                navigate('/home');
+            })
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    };
+
+    // on render, set listener
     useEffect(() => {
-        stickyHeaderFunc();
-        return () => window.removeEventListener('scroll', stickyHeaderFunc);
+        window.addEventListener('scroll', isSticky);
+        return () => {
+            window.removeEventListener('scroll', isSticky);
+        };
     }, []);
+
+    const isSticky = () => {
+        /* Method that will fix header after a specific scrollable */
+        const scrollTop = window.scrollY;
+        const stickyClass = scrollTop >= 250 ? 'sticky__header' : '';
+        setSticky(stickyClass);
+    };
 
     const menuToggle = () => menuRef.current.classList.toggle('active__menu');
 
     const navigateToCart = () => {
         navigate('/cart');
     };
-    const toggleProfileActions = () => {profileActionRef.current.classList.toggle('show__profileActions')}
+    const toggleProfileActions = () => {
+        profileActionRef.current.classList.toggle('show__profileActions');
+    };
     return (
-        <header className="header" ref={headerRef}>
+        <header className={sticky ? 'header sticky__header' : 'header'}>
             <Container>
                 <Row>
                     <div className="nav__wrapper">
@@ -106,7 +113,7 @@ const Header = () => {
                                     {currentUser ? (
                                         <span onClick={logout}>Logout</span>
                                     ) : (
-                                        <div className='d-flex align-items-center justify-content-center flex-column'>
+                                        <div className="d-flex align-items-center justify-content-center flex-column">
                                             <Link to="/signup">Signup</Link>
                                             <Link to="/login">Login</Link>
                                             <Link to="/dashboard">Dashboard</Link>

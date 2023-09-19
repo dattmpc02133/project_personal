@@ -13,12 +13,11 @@ import { cartActions } from '~/redux/slices/cartSlice';
 import { toast } from 'react-toastify';
 
 import { db } from '~/firebase.config';
-import { doc,getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import useGetData from '~/custom-hooks/useGetData';
 
 const ProductDetails = () => {
-
-    const [product,setProduct] = useState({})
+    const [product, setProduct] = useState({});
 
     const [tab, setTab] = useState('desc');
     const reviewUser = useRef('');
@@ -28,39 +27,45 @@ const ProductDetails = () => {
     const { id } = useParams();
     // const product = products.find((item) => item.id === id);
 
-    const {data:products} = useGetData('products')
-    const docRef = doc(db,'products',id)
-    useEffect(()=> {
+    const { data: products } = useGetData('products');
+    const docRef = doc(db, 'products', id);
+    useEffect(() => {
         const getProduct = async () => {
-            const docSnap = await getDoc(docRef)
-            if(docSnap.exists()){
-                setProduct(docSnap.data())
-            }else {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setProduct(docSnap.data());
+            } else {
                 console.log('no product.!');
             }
-        }
-        getProduct()
-    },[])
-    const { imgUrl, productName, price, 
+        };
+        getProduct();
+    }, []);
+    const {
+        imgUrl,
+        productName,
+        price,
         // avgRating, reviews,
-         shortDesc, description, category } = product;
+        shortDesc,
+        description,
+        category,
+    } = product;
     const relatedProducts = products.filter((item) => item.category === category);
     const submitHandler = (e) => {
         e.preventDefault();
-        const reviewUserName = reviewUser.current.value;
-        const reviewUserMsg = reviewMsg.current.value;
-        const reviewObj = {
-            userName: reviewUserName,
-            text: reviewUserMsg,
-            rating,
-        };
-        toast.success('Review submitted')
+        // const reviewUserName = reviewUser.current.value;
+        // const reviewUserMsg = reviewMsg.current.value;
+        // const reviewObj = {
+        //     userName: reviewUserName,
+        //     text: reviewUserMsg,
+        //     rating,
+        // };
+        toast.success('Review submitted');
     };
     const addToCart = () => {
         dispatch(
             cartActions.addItem({
                 id,
-                image: imgUrl,
+                imgUrl: imgUrl,
                 productName: productName,
                 price: price,
             }),
@@ -100,9 +105,7 @@ const ProductDetails = () => {
                                             <i className="ri-star-half-s-line"></i>
                                         </span>
                                     </div>
-                                    <p>
-                                        {/* (<span>{avgRating}</span> ratings) */}
-                                    </p>
+                                    <p>{/* (<span>{avgRating}</span> ratings) */}</p>
                                 </div>
                                 <div className="d-flex alight-items-center gap-5">
                                     <span className="product__price">${price}</span>
@@ -149,7 +152,12 @@ const ProductDetails = () => {
                                             <h4>Leave your experience</h4>
                                             <form action="" onSubmit={submitHandler}>
                                                 <div className="form__group">
-                                                    <input type="text" placeholder="Enter name" ref={reviewUser} required />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter name"
+                                                        ref={reviewUser}
+                                                        required
+                                                    />
                                                 </div>
 
                                                 <div className="form__group d-flex align-items-center gap-5 rating__group">
