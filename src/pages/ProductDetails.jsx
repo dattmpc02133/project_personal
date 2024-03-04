@@ -40,25 +40,10 @@ const ProductDetails = () => {
         };
         getProduct();
     }, []);
-    const {
-        imgUrl,
-        productName,
-        price,
-        // avgRating, reviews,
-        shortDesc,
-        description,
-        category,
-    } = product;
+    const { imgUrl, productName, price, shortDesc, description, category } = product;
     const relatedProducts = products.filter((item) => item.category === category);
     const submitHandler = (e) => {
         e.preventDefault();
-        // const reviewUserName = reviewUser.current.value;
-        // const reviewUserMsg = reviewMsg.current.value;
-        // const reviewObj = {
-        //     userName: reviewUserName,
-        //     text: reviewUserMsg,
-        //     rating,
-        // };
         toast.success('Review submitted');
     };
     const addToCart = () => {
